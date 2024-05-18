@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add your custom styles here */
+
+.flex-div {
+    @apply flex items-center;
+}
+
+.side-link {
+    @apply flex items-center mb-5 w-fit flex-wrap cursor-pointer;
+}
+
+.side-link img {
+    @apply w-[25px] mr-5; 
+}
+
+.side-link.active img {
+    @apply pb-0.5 border-b-2 border-[red]
+}
+
+.dash {
+    @apply border-0 h-[1px] bg-[#ccc] w-[85%] 
+}
+
+.dash-full {
+    @apply border-0 h-[1px] bg-[#ccc] w-full 
+}
+
+.small-sidebar {
+    @apply w-[5%];
+}
+
+.small-sidebar p, .small-sidebar h3 {
+    @apply hidden;
+}
+
+.small-sidebar .dash {
+    @apply w-1/2 mb-6;
+}
+
+.play-video-info img {
+    @apply w-5 mr-2;
+}
+
+.play-video-info span {
+    @apply inline-flex items-center ml-4;
+}
+
+.flexBasis_69 {
+    @apply [flex-basis:69%]
+}
+
+.flexBasis_49 {
+    @apply [flex-basis:49%]
+}
+
+.flexBasis_30 {
+    @apply [flex-basis:30%]
+}
+
+/* Animation */
+
+.esseInOut {
+    @apply transition-all duration-300 ease-in-out;
+}
