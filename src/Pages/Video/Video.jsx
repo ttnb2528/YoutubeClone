@@ -9,7 +9,7 @@ const Video = () => {
   return (
     <div className="play-container bg-[#f9f9f9] p-[20px_2%] flex justify-between flex-wrap ">
       <PlayVideo videoId={videoId} />
-      <Recommended />
+      <Recommended categoryId={categoryId} />
     </div>
   );
 };

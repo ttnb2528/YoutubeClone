@@ -3,13 +3,16 @@ import like from "../../assets/like.png";
 import dislike from "../../assets/dislike.png";
 import share from "../../assets/share.png";
 import save from "../../assets/save.png";
-import user_profile from "../../assets/user_profile.jpg";
 import { API_KEY, value_converter } from "../../data";
 import moment from "moment";
+import { useParams } from "react-router-dom";
 
-const PlayVideo = ({ videoId }) => {
+const PlayVideo = () => {
+  const { videoId } = useParams();
+
   const [apiData, setApiData] = useState(null);
   const [channelData, setChannelData] = useState(null);
+  const [commentData, setCommentData] = useState([]);
 
   useEffect(() => {
     const fetchVideoData = async () => {
@@ -23,13 +26,20 @@ const PlayVideo = ({ videoId }) => {
 
   useEffect(() => {
     const fetchOtherData = async () => {
-      const dataChannel_url = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=${apiData.snippet.channelId}&key=${API_KEY}`;
+      const dataChannel_url = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=${
+        apiData ? apiData.snippet.channelId : ""
+      }&key=${API_KEY}`;
       await fetch(dataChannel_url).then((response) =>
         response.json().then((data) => setChannelData(data.items[0]))
       );
+
+      const comment_url = `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&videoId=${videoId}&key=${API_KEY}`;
+      await fetch(comment_url)
+        .then((response) => response.json())
+        .then((data) => setCommentData(data.items));
     };
     fetchOtherData();
-  }, [apiData]);
+  }, [apiData, videoId]);
 
   return (
     <div className="play-video flexBasis_69">
@@ -105,87 +115,35 @@ const PlayVideo = ({ videoId }) => {
           {apiData ? value_converter(apiData.statistics.commentCount) : ""}{" "}
           Comments
         </h4>
-        <div className="comment flex items-start my-5">
-          <img src={user_profile} alt="" className="w-9 rounded-full mr-4" />
-          <div>
-            <h3 className="text-sm mb-0.5">
-              Jack Nicholson{" "}
-              <span className="text-xs text-neutral-500 font-medium ml-2">
-                1 day ago
-              </span>
-            </h3>
-            <p>
-              A global computer network providing a variety of information and
-            </p>
-            <div className="comment-action flex items-center my-2">
-              <img src={like} alt="" className="border-0 w-5 mr-1" />
-              <span className="mr-5 text-neutral-500">244</span>
-              <img src={dislike} alt="" className="border-0 w-5 mr-1" />
+        {commentData.map((item, i) => {
+          return (
+            <div key={i} className="comment flex items-start my-5">
+              <img
+                src={item.snippet.topLevelComment.snippet.authorProfileImageUrl}
+                alt=""
+                className="w-9 rounded-full mr-4"
+              />
+              <div>
+                <h3 className="text-sm mb-0.5">
+                  {item.snippet.topLevelComment.snippet.authorDisplayName}
+                  <span className="text-xs text-neutral-500 font-medium ml-2">
+                    1 day ago
+                  </span>
+                </h3>
+                <p>{item.snippet.topLevelComment.snippet.textDisplay}</p>
+                <div className="comment-action flex items-center my-2">
+                  <img src={like} alt="" className="border-0 w-5 mr-1" />
+                  <span className="mr-5 text-neutral-500">
+                    {value_converter(
+                      item.snippet.topLevelComment.snippet.likeCount
+                    )}
+                  </span>
+                  <img src={dislike} alt="" className="border-0 w-5 mr-1" />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div className="comment flex items-start my-5">
-          <img src={user_profile} alt="" className="w-9 rounded-full mr-4" />
-          <div>
-            <h3 className="text-sm mb-0.5">
-              Jack Nicholson{" "}
-              <span className="text-xs text-neutral-500 font-medium ml-2">
-                1 day ago
-              </span>
-            </h3>
-            <p>
-              A global computer network providing a variety of information and
-            </p>
-            <div className="comment-action flex items-center my-2">
-              <img src={like} alt="" className="border-0 w-5 mr-1" />
-              <span className="mr-5 text-neutral-500">244</span>
-              <img src={dislike} alt="" className="border-0 w-5 mr-1" />
-            </div>
-          </div>
-        </div>
-
-        <div className="comment flex items-start my-5">
-          <img src={user_profile} alt="" className="w-9 rounded-full mr-4" />
-          <div>
-            <h3 className="text-sm mb-0.5">
-              Jack Nicholson{" "}
-              <span className="text-xs text-neutral-500 font-medium ml-2">
-                1 day ago
-              </span>
-            </h3>
-            <p>
-              A global computer network providing a variety of information and
-            </p>
-            <div className="comment-action flex items-center my-2">
-              <img src={like} alt="" className="border-0 w-5 mr-1" />
-              <span className="mr-5 text-neutral-500">244</span>
-              <img src={dislike} alt="" className="border-0 w-5 mr-1" />
-            </div>
-          </div>
-        </div>
-
-        <div className="comment flex items-start my-5">
-          <img src={user_profile} alt="" className="w-9 rounded-full mr-4" />
-          <div>
-            <h3 className="text-sm mb-0.5">
-              Jack Nicholson{" "}
-              <span className="text-xs text-neutral-500 font-medium ml-2">
-                1 day ago
-              </span>
-            </h3>
-            <p>
-              A global computer network providing a variety of information and
-              communication facilities, consisting of interconnected networks
-              using standardized communication protocol s.
-            </p>
-            <div className="comment-action flex items-center my-2">
-              <img src={like} alt="" className="border-0 w-5 mr-1" />
-              <span className="mr-5 text-neutral-500">244</span>
-              <img src={dislike} alt="" className="border-0 w-5 mr-1" />
-            </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </div>
   );
