@@ -1,28 +1,64 @@
-import React from "react";
-import video1 from "../../assets/video.mp4";
+import React, { useEffect, useState } from "react";
 import like from "../../assets/like.png";
 import dislike from "../../assets/dislike.png";
 import share from "../../assets/share.png";
 import save from "../../assets/save.png";
-import jack from "../../assets/jack.png";
 import user_profile from "../../assets/user_profile.jpg";
+import { API_KEY, value_converter } from "../../data";
+import moment from "moment";
 
-const PlayVideo = () => {
+const PlayVideo = ({ videoId }) => {
+  const [apiData, setApiData] = useState(null);
+  const [channelData, setChannelData] = useState(null);
+
+  useEffect(() => {
+    const fetchVideoData = async () => {
+      const videoDetails_url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${API_KEY}`;
+      await fetch(videoDetails_url)
+        .then((response) => response.json())
+        .then((data) => setApiData(data.items[0]));
+    };
+    fetchVideoData();
+  }, [videoId]);
+
+  useEffect(() => {
+    const fetchOtherData = async () => {
+      const dataChannel_url = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=${apiData.snippet.channelId}&key=${API_KEY}`;
+      await fetch(dataChannel_url).then((response) =>
+        response.json().then((data) => setChannelData(data.items[0]))
+      );
+    };
+    fetchOtherData();
+  }, [apiData]);
+
   return (
     <div className="play-video flexBasis_69">
-      <video className="w-full" src={video1} controls autoPlay muted></video>
+      {/* <video className="w-full" src={video1} controls autoPlay muted></video> */}
+      <iframe
+        className="w-full h-[37vw]"
+        src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+      ></iframe>
       <h3 className="mt-3 font-semibold text-2xl">
-        Best youtube Chanel To Learn Web Development
+        {apiData ? apiData.snippet.title : "Title Here"}
       </h3>
       <div className="play-video-info flex items-center justify-between flex-wrap mt-3 text-sm text-neutral-500">
-        <p>1525 Views &bull; 2 days ago</p>
+        <p>
+          {apiData ? value_converter(apiData.statistics.viewCount) : "16K"}
+          Views &bull;{" "}
+          {apiData ? moment(apiData.snippet.publishedAt).fromNow() : ""}
+        </p>
         <div className="flex">
           <span>
-            <img src={like} alt="" /> 125
+            <img src={like} alt="" />{" "}
+            {apiData ? value_converter(apiData.statistics.likeCount) : ""}
           </span>
 
           <span>
-            <img src={dislike} alt="" />2
+            <img src={dislike} alt="" />
           </span>
 
           <span>
@@ -40,10 +76,20 @@ const PlayVideo = () => {
       <div className="dash-full my-3"></div>
 
       <div className="publisher flex items-center mt-5">
-        <img className="w-10 rounded-full mr-4" src={jack} alt="" />
+        <img
+          className="w-10 rounded-full mr-4"
+          src={channelData ? channelData.snippet.thumbnails.default.url : ""}
+          alt=""
+        />
         <div className="flex-1 leading-4">
-          <p className="text-black font-semibold text-lg">GreatStack</p>
-          <span className="text-sm text-neutral-500">1M Subscribers</span>
+          <p className="text-black font-semibold text-lg">
+            {apiData ? apiData.snippet.channelTitle : "channelHere"}
+          </p>
+          <span className="text-sm text-neutral-500">
+            {channelData
+              ? value_converter(channelData.statistics.subscriberCount)
+              : ""}
+          </span>
         </div>
         <button className="bg-red-600 text-white py-2 px-8 border-0 outline-0 rounded cursor-pointer">
           Subscriber
@@ -52,13 +98,13 @@ const PlayVideo = () => {
 
       <div className="vid-description pl-14 my-4">
         <p className="text-sm mb-1 text-neutral-500">
-          Chanel that makes learning Easy
-        </p>
-        <p className="text-sm mb-1 text-neutral-500">
-          Subscribe GreatStack to watch more Tutorials on web development
+          {apiData ? apiData.snippet.description : "Description Here"}
         </p>
         <div className="dash-full"></div>
-        <h4 className="text-sm text-neutral-500 mt-4">130 Comments</h4>
+        <h4 className="text-sm text-neutral-500 mt-4">
+          {apiData ? value_converter(apiData.statistics.commentCount) : ""}{" "}
+          Comments
+        </h4>
         <div className="comment flex items-start my-5">
           <img src={user_profile} alt="" className="w-9 rounded-full mr-4" />
           <div>
@@ -72,9 +118,9 @@ const PlayVideo = () => {
               A global computer network providing a variety of information and
             </p>
             <div className="comment-action flex items-center my-2">
-              <img src={like} alt="" className="border-0 w-5 mr-1"/>
+              <img src={like} alt="" className="border-0 w-5 mr-1" />
               <span className="mr-5 text-neutral-500">244</span>
-              <img src={dislike} alt="" className="border-0 w-5 mr-1"/>
+              <img src={dislike} alt="" className="border-0 w-5 mr-1" />
             </div>
           </div>
         </div>
@@ -92,9 +138,9 @@ const PlayVideo = () => {
               A global computer network providing a variety of information and
             </p>
             <div className="comment-action flex items-center my-2">
-              <img src={like} alt="" className="border-0 w-5 mr-1"/>
+              <img src={like} alt="" className="border-0 w-5 mr-1" />
               <span className="mr-5 text-neutral-500">244</span>
-              <img src={dislike} alt="" className="border-0 w-5 mr-1"/>
+              <img src={dislike} alt="" className="border-0 w-5 mr-1" />
             </div>
           </div>
         </div>
@@ -112,9 +158,9 @@ const PlayVideo = () => {
               A global computer network providing a variety of information and
             </p>
             <div className="comment-action flex items-center my-2">
-              <img src={like} alt="" className="border-0 w-5 mr-1"/>
+              <img src={like} alt="" className="border-0 w-5 mr-1" />
               <span className="mr-5 text-neutral-500">244</span>
-              <img src={dislike} alt="" className="border-0 w-5 mr-1"/>
+              <img src={dislike} alt="" className="border-0 w-5 mr-1" />
             </div>
           </div>
         </div>
@@ -131,13 +177,12 @@ const PlayVideo = () => {
             <p>
               A global computer network providing a variety of information and
               communication facilities, consisting of interconnected networks
-              using standardized communication protocol
-              s.
+              using standardized communication protocol s.
             </p>
             <div className="comment-action flex items-center my-2">
-              <img src={like} alt="" className="border-0 w-5 mr-1"/>
+              <img src={like} alt="" className="border-0 w-5 mr-1" />
               <span className="mr-5 text-neutral-500">244</span>
-              <img src={dislike} alt="" className="border-0 w-5 mr-1"/>
+              <img src={dislike} alt="" className="border-0 w-5 mr-1" />
             </div>
           </div>
         </div>
