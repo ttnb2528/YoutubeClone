@@ -14,8 +14,8 @@ const Home = ({ sidebar }) => {
       />
 
       <div
-        className={`container p-[20px_2%_20px_17%] ${
-          sidebar ? "" : "pl-[7%]"
+        className={`container mx-auto px-[5%] lg:p-[20px_2%_20px_12%] ${
+          sidebar ? "" : "lg:pl-[7%]"
         } esseInOut`}
       >
         <Feed category={category} />

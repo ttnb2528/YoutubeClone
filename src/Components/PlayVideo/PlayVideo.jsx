@@ -42,10 +42,10 @@ const PlayVideo = () => {
   }, [apiData, videoId]);
 
   return (
-    <div className="play-video flexBasis_69">
+    <div className="play-video basis-full lg:basis-[69%]">
       {/* <video className="w-full" src={video1} controls autoPlay muted></video> */}
       <iframe
-        className="w-full h-[37vw]"
+        className="w-full h-[50vw] lg:h-[37vw]"
         src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -106,7 +106,7 @@ const PlayVideo = () => {
         </button>
       </div>
 
-      <div className="vid-description pl-14 my-4">
+      <div className="vid-description pl-0 lg:pl-14 my-4">
         <p className="text-sm mb-1 text-neutral-500">
           {apiData ? apiData.snippet.description : "Description Here"}
         </p>

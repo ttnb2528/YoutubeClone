@@ -29,7 +29,7 @@ const Sidebar = ({ sidebar, category, setCategory }) => {
 
   return (
     <div
-      className={`side-bar ${
+      className={`side-bar hidden lg:block ${
         sidebar ? "" : "small-sidebar"
       } bg-white w-[15%] h-[100vh] fixed top-0 pl-[2%] pt-20`}
     >

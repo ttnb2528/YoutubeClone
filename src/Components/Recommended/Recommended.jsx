@@ -16,19 +16,23 @@ const Recommended = ({ categoryId }) => {
   }, [categoryId]);
 
   return (
-    <div className="recommended flexBasis_30">
+    <div className="recommended basis-full lg:basis-[30%]">
       {apiData.map((item, i) => {
         return (
-          <Link to={`/video/${item.snippet.categoryId}/${item.id}`} key={i} className="side-video-list flex justify-between mb-2">
+          <Link
+            to={`/video/${item.snippet.categoryId}/${item.id}`}
+            key={i}
+            className="side-video-list flex mb-2"
+          >
             <img
               src={item.snippet.thumbnails.medium.url}
               alt=""
-              className="w-1/2 flexBasis_49"
+              className="w-1/2 basis-[49%] mr-2"
             />
             <div className="vid-info">
-              <h4>{item.snippet.title}</h4>
-              <p>{item.snippet.channelTitle}</p>
-              <p>{value_converter(item.statistics.viewCount)} Views</p>
+              <h4 className="text-base font-semibold text-black my-1 mx-0">{item.snippet.title}</h4>
+              <p className="text-sm font-semibold text-neutral-500">{item.snippet.channelTitle}</p>
+              <p className="text-sm">{value_converter(item.statistics.viewCount)} Views</p>
             </div>
           </Link>
         );
